@@ -17,4 +17,6 @@ dependencies {
     compile group: 'joda-time', name: 'joda-time', version: '2.9.6'
     compile group: 'org.apache.commons', name: 'commons-csv', version: '1.4'
     compile group: 'com.github.dpaukov', name: 'combinatoricslib3', version: '3.1.1'
+    compile group: 'com.google.guava', name: 'guava', version: '20.0'
+    compile group: 'com.codepoetics', name: 'protonpack', version: '1.9'
 }

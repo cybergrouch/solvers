@@ -95,6 +95,10 @@ public class TransferRequestTest {
 
         transferRequest.setRequestId(6789L);
         assertEquals((Long) 6789L, transferRequest.getRequestId());
+
+        CurrencyPair expected = CurrencyPair.create(Currency.SGD, Currency.PHP);
+        assertEquals(expected, transferRequest.getCurrencyPair());
+
     }
 
     @Test
@@ -199,6 +203,12 @@ public class TransferRequestTest {
         transferRequestOptional = builder.build();
         assertNotNull(transferRequestOptional);
         assertTrue(transferRequestOptional.isPresent());
+
+        CurrencyPair expected = CurrencyPair.create(Currency.AUD, Currency.USD);
+        assertEquals(expected, transferRequestOptional.get().getCurrencyPair());
+
+        Currency sourceCurrency = transferRequestOptional.get().getSourceCurrency();
+        assertEquals(Currency.USD, sourceCurrency);
     }
 
 }

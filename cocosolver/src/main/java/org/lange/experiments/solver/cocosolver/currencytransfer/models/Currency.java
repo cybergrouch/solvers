@@ -29,4 +29,9 @@ public enum Currency {
         String inputCurrencyCode = StringUtils.isBlank(currencyCode) ? "" : currencyCode.toUpperCase();
         return Arrays.stream(values()).filter(currency -> currency.name().toUpperCase().equals(inputCurrencyCode)).findFirst();
     }
+
+    @Override
+    public String toString() {
+        return this.name();
+    }
 }

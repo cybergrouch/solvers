@@ -1,13 +1,11 @@
 package org.lange.experiments.solver.cocosolver.currencytransfer.models;
 
-import org.apache.commons.lang3.tuple.Pair;
 import org.junit.Test;
 
-import java.util.List;
+import java.util.Optional;
 
+import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 /**
  * Created by lange on 26/11/16.
@@ -15,21 +13,67 @@ import static org.junit.Assert.assertTrue;
 public class CurrencyPairTest {
 
     @Test
-    public void testCalculateCurrencyPairs() {
-        List<Pair<Currency, Currency>> currencyPairs = CurrencyPair.generate(Currency.values());
-        assertNotNull(currencyPairs);
+    public void testBuilder() {
+        CurrencyPair.Builder builder = CurrencyPair.Builder.create();
+        assertNotNull(builder);
+        assertTrue(ModelBuilder.class.isAssignableFrom(builder.getClass()));
 
-        currencyPairs.forEach(pair -> {
-            assertTrue(pair.getLeft().name().compareTo(pair.getRight().name()) <= 0);
-        });
+        Optional<CurrencyPair> buildOptional = builder.build();
+        assertNotNull(buildOptional);
+        assertFalse(buildOptional.isPresent());
     }
 
     @Test
-    public void testNormalisePair() {
-        Pair<Currency, Currency> pair1 = Pair.of(Currency.EUR, Currency.AUD);
-        Pair<Currency, Currency> pair2 = CurrencyPair.NORMALISE_PAIR.apply(pair1);
+    public void testCreate() {
+        CurrencyPair currencyPair = CurrencyPair.create(Currency.PHP, Currency.EUR);
+        assertNotNull(currencyPair);
+        assertEquals("EUR-PHP", currencyPair.toString());
+    }
+
+    @Test
+    public void testProperties() {
+        CurrencyPair.Builder builder = CurrencyPair.Builder.create();
+        assertNotNull(builder);
+
+        Optional<CurrencyPair> buildOptional = builder.build();
+        assertNotNull(buildOptional);
+        assertFalse(buildOptional.isPresent());
+
+        builder = builder.currencies(Currency.USD, Currency.EUR);
+
+        buildOptional = builder.build();
+        assertNotNull(buildOptional);
+        assertTrue(buildOptional.isPresent());
+
+        CurrencyPair currencyPair = buildOptional.orElse(null);
+        Currency leftCurrency = currencyPair.getLeft();
+        Currency rightCurrency = currencyPair.getRight();
+        assertNotNull(leftCurrency);
+        assertNotNull(rightCurrency);
+        assertEquals(Currency.EUR, leftCurrency);
+        assertEquals(Currency.USD, rightCurrency);
+    }
+
+    @Test
+    public void testEquals() {
+        Optional<CurrencyPair> pair1 = CurrencyPair.Builder.create().currencies(Currency.EUR, Currency.AUD).build();
+        assertNotNull(pair1);
+        assertTrue(pair1.isPresent());
+
+        Optional<CurrencyPair> pair2 = CurrencyPair.Builder.create().currencies(Currency.AUD, Currency.EUR).build();
         assertNotNull(pair2);
-        assertEquals(Currency.AUD, pair2.getLeft());
-        assertEquals(Currency.EUR, pair2.getRight());
+        assertTrue(pair2.isPresent());
+
+        Optional<CurrencyPair> pair3 = CurrencyPair.Builder.create().currencies(Currency.USD, Currency.EUR).build();
+        assertNotNull(pair3);
+        assertTrue(pair3.isPresent());
+
+        assertEquals(pair1, pair2);
+        assertEquals(pair1.get(), pair2.get());
+        assertEquals(pair1.get().hashCode(), pair2.get().hashCode());
+
+        assertNotEquals(pair1, pair3);
+        assertNotEquals(pair1.get(), pair3.get());
+        assertNotEquals(pair1.get().hashCode(), pair3.get().hashCode());
     }
 }

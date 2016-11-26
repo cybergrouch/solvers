@@ -1,39 +1,111 @@
 package org.lange.experiments.solver.cocosolver.currencytransfer.models;
 
 import org.apache.commons.lang3.tuple.Pair;
-import org.paukov.combinatorics3.Generator;
 
-import java.util.Comparator;
-import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static com.codepoetics.protonpack.StreamUtils.zip;
 
 /**
  * Created by lange on 26/11/16.
  */
 public class CurrencyPair {
 
-    public static final Comparator<? super Currency> CURRENCY_COMPARATOR = (cur1, cur2) -> cur1.name().compareTo(cur2.name());
+    private Currency left;
+    private Currency right;
 
-    public static final Function<List<Currency>, List<Currency>> NORMALISE_LIST = list -> {
-        list.sort(CURRENCY_COMPARATOR);
-        return list;
-    };
+    private static final Stream<Function<CurrencyPair, ?>> getFieldExtractors() {
+        return Stream.of(CurrencyPair::getLeft, CurrencyPair::getRight);
+    }
 
-    public static final Function<List<Currency>, Pair<Currency, Currency>> LIST_TO_PAIR = listPair -> Pair.of(listPair.get(0), listPair.get(1));
 
-    public static final Function<Pair<Currency, Currency>, List<Currency>> PAIR_TO_LIST = pair -> Stream.of(pair.getLeft(), pair.getRight()).collect(Collectors.toList());
+    public Currency getLeft() {
+        return left;
+    }
 
-    public static final Function<Pair<Currency, Currency>, Pair<Currency, Currency>> NORMALISE_PAIR = pair -> Optional.ofNullable(pair).map(LIST_TO_PAIR.compose(NORMALISE_LIST).compose(PAIR_TO_LIST)).orElse(null);
+    private void setLeft(Currency left) {
+        this.left = left;
+    }
 
-    public static List<Pair<Currency, Currency>> generate(Currency[] currencies) {
-        return Generator.combination(currencies)
-                .simple(2)
-                .stream()
-                .map(LIST_TO_PAIR.compose(NORMALISE_LIST))
-                .collect(Collectors.toList());
+    public Currency getRight() {
+        return right;
+    }
 
+    private void setRight(Currency right) {
+        this.right = right;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%s-%s", getLeft().name(), getRight().name());
+    }
+
+    @Override
+    public int hashCode() {
+        Optional<String> concat = zip(getFieldExtractors(), Stream.generate(() -> this), (f, i) -> f.apply(i).toString()).reduce(String::concat);
+        return Objects.hashCode(concat.orElse(""));
+    }
+
+    @Override
+    public boolean equals(final Object obj){
+        if(obj instanceof CurrencyPair){
+            final CurrencyPair other = (CurrencyPair) obj;
+
+            Stream<?> thisFieldValues = zip(
+                    getFieldExtractors(),
+                    Stream.generate(() -> this),
+                    (f, i) -> f.apply(i));
+            Stream<?> otherFieldValues = zip(
+                    getFieldExtractors(),
+                    Stream.generate(() -> other),
+                    (f, i) -> f.apply(i));
+            return zip(
+                        thisFieldValues,
+                        otherFieldValues,
+                        (t, o) -> t.equals(o))
+                    .reduce(Boolean::logicalAnd)
+                    .orElse(Boolean.FALSE);
+        } else{
+            return false;
+        }
+    }
+
+    public static CurrencyPair create(Currency firstCurrency, Currency secondCurrency) {
+        return Builder.create().currencies(firstCurrency, secondCurrency).build().orElse(null);
+    }
+
+    public static class Builder implements ModelBuilder<CurrencyPair> {
+        private CurrencyPair object = new CurrencyPair();
+
+        private Builder() {
+            super();
+        }
+
+        public static CurrencyPair.Builder create() {
+            return new CurrencyPair.Builder();
+        }
+
+        public Builder currencies(Currency firstCurrency, Currency secondCurrency) {
+            Optional.of(Pair.of(firstCurrency, secondCurrency))
+                .map(CurrencyPairUtil.NORMALISE_PAIR)
+                .ifPresent(pair -> {
+                    object.setLeft(pair.getLeft());
+                    object.setRight(pair.getRight());
+                });
+            return this;
+        }
+
+        @Override
+        public Stream<Function<CurrencyPair, ?>> getFieldExtractors() {
+            return CurrencyPair.getFieldExtractors();
+        }
+
+        @Override
+        public CurrencyPair getBaseObject() {
+            return object;
+        }
     }
 }

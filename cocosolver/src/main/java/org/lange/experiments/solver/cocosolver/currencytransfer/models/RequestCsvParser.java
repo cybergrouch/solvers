@@ -39,14 +39,12 @@ public class RequestCsvParser {
     public static final Function<String, Optional<DateTime>> PARSER_DATE_TIME =
             dateStr -> TRIM.apply(dateStr)
                             .map(trimmed -> ISODateTimeFormat.dateTimeNoMillis().parseDateTime(trimmed))
-                            .map(dt -> DateTimeBuilder.create()
-                                    .year(dt.getYear())
-                                    .month(dt.getMonthOfYear())
-                                    .date(dt.getDayOfMonth())
-                                    .hour(dt.getHourOfDay())
-                                    .minute(dt.getMinuteOfHour())
-                                    .build()
-                                    .orElse(null));
+                            .map(dt -> TimeUtil.toUtcDateTime
+                                    .apply(dt.getYear())
+                                    .apply(dt.getMonthOfYear())
+                                    .apply(dt.getDayOfMonth())
+                                    .apply(dt.getHourOfDay())
+                                    .apply(dt.getMinuteOfHour()));
 
     public static List<TransferRequest> parse(Reader in) throws IOException {
         Iterable<CSVRecord> records = CSVFormat.RFC4180.withHeader(Headers.class).parse(in);

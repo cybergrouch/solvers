@@ -70,6 +70,14 @@ public class TransferRequest {
         this.requestId = requestId;
     }
 
+    public CurrencyPair getCurrencyPair() {
+        return CurrencyPair.create(this.getTargetCurrency(), this.getAmount().getCurrency());
+    }
+
+    public Currency getSourceCurrency() {
+        return this.getAmount().getCurrency();
+    }
+
     public static class Builder implements ModelBuilder<TransferRequest> {
         TransferRequest object = new TransferRequest();
 

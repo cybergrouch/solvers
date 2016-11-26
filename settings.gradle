@@ -1,0 +1,3 @@
+rootProject.name = 'solvers'
+include 'cocosolver'
+

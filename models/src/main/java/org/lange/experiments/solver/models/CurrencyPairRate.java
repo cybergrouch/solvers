@@ -5,8 +5,6 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-import static org.lange.experiments.solver.models.InversibleRate.INVERSE;
-
 /**
  * Created by lange on 27/11/16.
  */

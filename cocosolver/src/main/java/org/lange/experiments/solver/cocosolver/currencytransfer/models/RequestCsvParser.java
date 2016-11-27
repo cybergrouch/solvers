@@ -40,13 +40,13 @@ public class RequestCsvParser {
                             .map(amt -> MonetaryAmount.Builder.create().amount(amt).currency(currency).build().orElse(null));
     public static final Function<String, Optional<DateTime>> PARSER_DATE_TIME =
             dateStr -> TRIM.apply(dateStr)
-                            .map(trimmed -> ISODateTimeFormat.dateTimeNoMillis().parseDateTime(trimmed))
-                            .map(dt -> TimeUtil.toUtcDateTime
-                                    .apply(dt.getYear())
-                                    .apply(dt.getMonthOfYear())
-                                    .apply(dt.getDayOfMonth())
-                                    .apply(dt.getHourOfDay())
-                                    .apply(dt.getMinuteOfHour()));
+                    .map(trimmed -> ISODateTimeFormat.dateTimeNoMillis().parseDateTime(trimmed))
+                    .map(dt -> TimeUtil.toUtcDateTime
+                            .apply(dt.getYear())
+                            .apply(dt.getMonthOfYear())
+                            .apply(dt.getDayOfMonth())
+                            .apply(dt.getHourOfDay())
+                            .apply(dt.getMinuteOfHour()));
 
     public static List<TransferRequest> parse(Reader in) throws IOException {
         Iterable<CSVRecord> records = CSVFormat.RFC4180.withHeader(Headers.class).parse(in);

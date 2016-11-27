@@ -1,15 +1,12 @@
 package org.lange.experiments.solver.models;
 
 import org.junit.Test;
-import org.lange.experiments.solver.models.ModelBuilder;
 
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * Created by lange on 25/11/16.

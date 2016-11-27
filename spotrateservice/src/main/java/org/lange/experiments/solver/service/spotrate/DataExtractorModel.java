@@ -1,12 +1,10 @@
 package org.lange.experiments.solver.service.spotrate;
 
-import org.json.JSONObject;
 import org.lange.experiments.solver.models.ModelBuilder;
 
 import java.io.Reader;
 import java.util.Optional;
 import java.util.concurrent.Callable;
-import java.util.concurrent.FutureTask;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Stream;

@@ -83,7 +83,7 @@ public class SpotRateQuote {
                             Optional.ofNullable(fromCurrency)
                                     .map(f ->
                                             Optional.ofNullable(toCurrency)
-                                                .map(t -> Pair.of(f, t)).get())
+                                                    .map(t -> Pair.of(f, t)).get())
                                     .map(p -> Pair.of(p, rt)).get())
                     .ifPresent(oP -> {
                         BigDecimal conversionRate = oP.getRight();

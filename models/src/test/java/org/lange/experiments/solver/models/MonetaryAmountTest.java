@@ -2,7 +2,6 @@ package org.lange.experiments.solver.models;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.lange.experiments.solver.models.ModelBuilder;
 
 import java.util.Optional;
 

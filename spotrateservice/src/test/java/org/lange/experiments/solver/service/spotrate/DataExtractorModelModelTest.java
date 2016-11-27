@@ -9,9 +9,7 @@ import java.io.Reader;
 import java.util.Optional;
 import java.util.concurrent.*;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * Created by lange on 26/11/16.

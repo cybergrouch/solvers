@@ -13,7 +13,7 @@ public class Problem1 {
     public static void main(String... args) {
         int N = 100;
 // 1. Modelling part
-        Model model = new Model("all-interval series of size "+ N);
+        Model model = new Model("all-interval series of size " + N);
 // 1.a declare the variables
         IntVar[] S = model.intVarArray("s", N, 0, N - 1, false);
         IntVar[] V = model.intVarArray("V", N - 1, 1, N - 1, false);
@@ -30,7 +30,7 @@ public class Problem1 {
         Solver solver = model.getSolver();
 // 2.a define a search strategy
         solver.setSearch(Search.minDomLBSearch(S));
-        if(solver.solve()){
+        if (solver.solve()) {
             System.out.printf("All interval series of size %d%n", N);
             for (int i = 0; i < N - 1; i++) {
                 System.out.printf("%d <%d> ",

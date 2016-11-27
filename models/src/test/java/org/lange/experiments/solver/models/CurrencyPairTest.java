@@ -2,12 +2,10 @@ package org.lange.experiments.solver.models;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.lange.experiments.solver.models.ModelBuilder;
 
 import java.util.Optional;
 
 import static org.junit.Assert.*;
-import static org.junit.Assert.assertEquals;
 
 /**
  * Created by lange on 26/11/16.

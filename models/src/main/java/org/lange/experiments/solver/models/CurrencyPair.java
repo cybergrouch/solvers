@@ -69,8 +69,8 @@ public class CurrencyPair {
     }
 
     @Override
-    public boolean equals(final Object obj){
-        if(obj instanceof CurrencyPair){
+    public boolean equals(final Object obj) {
+        if (obj instanceof CurrencyPair) {
             final CurrencyPair other = (CurrencyPair) obj;
 
             Stream<?> thisFieldValues = StreamUtils.zip(
@@ -82,12 +82,12 @@ public class CurrencyPair {
                     Stream.generate(() -> other),
                     (f, i) -> f.apply(i));
             return StreamUtils.zip(
-                        thisFieldValues,
-                        otherFieldValues,
-                        (t, o) -> t.equals(o))
+                    thisFieldValues,
+                    otherFieldValues,
+                    (t, o) -> t.equals(o))
                     .reduce(Boolean::logicalAnd)
                     .orElse(Boolean.FALSE);
-        } else{
+        } else {
             return false;
         }
     }
@@ -109,11 +109,11 @@ public class CurrencyPair {
 
         public Builder currencies(Currency firstCurrency, Currency secondCurrency) {
             Optional.of(Pair.of(firstCurrency, secondCurrency))
-                .map(CurrencyPairUtil.NORMALISE_PAIR)
-                .ifPresent(pair -> {
-                    object.setLeft(pair.getLeft());
-                    object.setRight(pair.getRight());
-                });
+                    .map(CurrencyPairUtil.NORMALISE_PAIR)
+                    .ifPresent(pair -> {
+                        object.setLeft(pair.getLeft());
+                        object.setRight(pair.getRight());
+                    });
             return this;
         }
 

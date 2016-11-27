@@ -178,7 +178,8 @@ public class TransferRequestTest {
                         .targetCurrency(Currency.AUD)
                         .validFrom(DateTimeBuilder.create().year(2016).month(1).date(15).hour(10).minute(45).build().orElse(null))
                         .validUntil(DateTimeBuilder.create().year(2016).month(1).date(16).hour(10).minute(45).build().orElse(null))
-                        .requestorId(12345L);;
+                        .requestorId(12345L);
+        ;
         assertNotNull(builder);
 
         transferRequestOptional = builder.build();

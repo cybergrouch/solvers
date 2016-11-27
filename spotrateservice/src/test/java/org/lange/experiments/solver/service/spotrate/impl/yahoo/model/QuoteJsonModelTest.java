@@ -1,4 +1,4 @@
-package org.lange.experiments.solver.service.spotrate.model.yahoo;
+package org.lange.experiments.solver.service.spotrate.impl.model.yahoo;
 
 import org.junit.Test;
 import org.lange.experiments.solver.service.spotrate.utils.FileUtils;

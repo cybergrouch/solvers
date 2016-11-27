@@ -1,4 +1,4 @@
-package org.lange.experiments.solver.service.spotrate.model;
+package org.lange.experiments.solver.service.spotrate.impl.model;
 
 import org.joda.time.DateTime;
 import org.lange.experiments.solver.models.Currency;

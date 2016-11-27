@@ -1,11 +1,10 @@
-package org.lange.experiments.solver.service.spotrate.model.yahoo;
+package org.lange.experiments.solver.service.spotrate.impl.model.yahoo;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
-import org.joda.time.DateTimeUtils;
 import org.joda.time.format.ISODateTimeFormat;
 import org.lange.experiments.solver.models.TimeUtil;
 

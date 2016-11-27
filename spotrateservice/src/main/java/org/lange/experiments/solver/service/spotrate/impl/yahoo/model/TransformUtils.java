@@ -1,7 +1,6 @@
-package org.lange.experiments.solver.service.spotrate.model.yahoo;
+package org.lange.experiments.solver.service.spotrate.impl.model.yahoo;
 
-import org.lange.experiments.solver.service.spotrate.model.yahoo.QuoteJsonModel;
-import org.lange.experiments.solver.service.spotrate.model.SpotRateQuote;
+import org.lange.experiments.solver.service.spotrate.impl.model.SpotRateQuote;
 
 import java.util.Optional;
 import java.util.function.Function;

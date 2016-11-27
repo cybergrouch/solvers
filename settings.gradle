@@ -1,3 +1,5 @@
 rootProject.name = 'solvers'
 include 'cocosolver'
+include 'spotrateservice'
+include 'models'
 

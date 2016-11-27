@@ -1,4 +1,4 @@
-package org.lange.experiments.solver.cocosolver.currencytransfer.models;
+package org.lange.experiments.solver.models;
 
 import org.apache.commons.lang3.StringUtils;
 

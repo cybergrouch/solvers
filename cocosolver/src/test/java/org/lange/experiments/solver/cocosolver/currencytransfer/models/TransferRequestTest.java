@@ -3,6 +3,7 @@ package org.lange.experiments.solver.cocosolver.currencytransfer.models;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.junit.Test;
+import org.lange.experiments.solver.models.*;
 
 import java.util.Optional;
 

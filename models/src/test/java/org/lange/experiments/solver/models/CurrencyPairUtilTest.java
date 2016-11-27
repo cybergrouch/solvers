@@ -1,6 +1,7 @@
-package org.lange.experiments.solver.cocosolver.currencytransfer.models;
+package org.lange.experiments.solver.models;
 
 import org.apache.commons.lang3.tuple.Pair;
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.List;
@@ -29,7 +30,7 @@ public class CurrencyPairUtilTest {
         Pair<Currency, Currency> pair1 = Pair.of(Currency.EUR, Currency.AUD);
         Pair<Currency, Currency> pair2 = CurrencyPairUtil.NORMALISE_PAIR.apply(pair1);
         assertNotNull(pair2);
-        assertEquals(Currency.AUD, pair2.getLeft());
-        assertEquals(Currency.EUR, pair2.getRight());
+        Assert.assertEquals(Currency.AUD, pair2.getLeft());
+        Assert.assertEquals(Currency.EUR, pair2.getRight());
     }
 }

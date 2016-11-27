@@ -1,18 +1,23 @@
-package org.lange.experiments.solver.cocosolver.currencytransfer.models;
+package org.lange.experiments.solver.models;
 
+import com.codepoetics.protonpack.StreamUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
+import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-import static com.codepoetics.protonpack.StreamUtils.zip;
-
 /**
  * Created by lange on 26/11/16.
  */
 public class CurrencyPair {
+
+    public enum Direction {
+        NORMAL,
+        INVERSED;
+    }
 
     private Currency left;
     private Currency right;
@@ -20,7 +25,6 @@ public class CurrencyPair {
     private static final Stream<Function<CurrencyPair, ?>> getFieldExtractors() {
         return Stream.of(CurrencyPair::getLeft, CurrencyPair::getRight);
     }
-
 
     public Currency getLeft() {
         return left;
@@ -38,6 +42,21 @@ public class CurrencyPair {
         this.right = right;
     }
 
+    public Optional<Direction> getRelativeDirection(Currency fromCurrency, Currency toCurrency) {
+        return Optional.ofNullable(fromCurrency).map(f -> Optional.ofNullable(toCurrency)).map(t -> {
+            if (fromCurrency == left && toCurrency == right) {
+                return Direction.NORMAL;
+            } else if (fromCurrency == right && toCurrency == left) {
+                return Direction.INVERSED;
+            }
+            return null;
+        });
+    }
+
+    public Optional<CurrencyPairRate> createRate(Currency fromCurrency, Currency toCurrency, BigDecimal conversionRate) {
+        return CurrencyPairRate.Builder.create().currencyPair(this).quotedRate(fromCurrency, toCurrency, conversionRate).build();
+    }
+
     @Override
     public String toString() {
         return String.format("%s-%s", getLeft().name(), getRight().name());
@@ -45,7 +64,7 @@ public class CurrencyPair {
 
     @Override
     public int hashCode() {
-        Optional<String> concat = zip(getFieldExtractors(), Stream.generate(() -> this), (f, i) -> f.apply(i).toString()).reduce(String::concat);
+        Optional<String> concat = StreamUtils.zip(getFieldExtractors(), Stream.generate(() -> this), (f, i) -> f.apply(i).toString()).reduce(String::concat);
         return Objects.hashCode(concat.orElse(""));
     }
 
@@ -54,15 +73,15 @@ public class CurrencyPair {
         if(obj instanceof CurrencyPair){
             final CurrencyPair other = (CurrencyPair) obj;
 
-            Stream<?> thisFieldValues = zip(
+            Stream<?> thisFieldValues = StreamUtils.zip(
                     getFieldExtractors(),
                     Stream.generate(() -> this),
                     (f, i) -> f.apply(i));
-            Stream<?> otherFieldValues = zip(
+            Stream<?> otherFieldValues = StreamUtils.zip(
                     getFieldExtractors(),
                     Stream.generate(() -> other),
                     (f, i) -> f.apply(i));
-            return zip(
+            return StreamUtils.zip(
                         thisFieldValues,
                         otherFieldValues,
                         (t, o) -> t.equals(o))

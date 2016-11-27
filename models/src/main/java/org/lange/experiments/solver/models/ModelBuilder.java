@@ -1,4 +1,4 @@
-package org.lange.experiments.solver.cocosolver.currencytransfer.models;
+package org.lange.experiments.solver.models;
 
 import java.util.Optional;
 import java.util.function.Function;

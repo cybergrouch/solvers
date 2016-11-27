@@ -1,8 +1,11 @@
 package org.lange.experiments.solver.cocosolver.currencytransfer.models;
 
 import org.joda.time.DateTime;
+import org.lange.experiments.solver.models.Currency;
+import org.lange.experiments.solver.models.CurrencyPair;
+import org.lange.experiments.solver.models.ModelBuilder;
+import org.lange.experiments.solver.models.MonetaryAmount;
 
-import java.util.Arrays;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Stream;

@@ -1,6 +1,8 @@
-package org.lange.experiments.solver.cocosolver.currencytransfer.models;
+package org.lange.experiments.solver.models;
 
+import org.junit.Assert;
 import org.junit.Test;
+import org.lange.experiments.solver.models.ModelBuilder;
 
 import java.util.Optional;
 
@@ -27,7 +29,7 @@ public class CurrencyPairTest {
     public void testCreate() {
         CurrencyPair currencyPair = CurrencyPair.create(Currency.PHP, Currency.EUR);
         assertNotNull(currencyPair);
-        assertEquals("EUR-PHP", currencyPair.toString());
+        Assert.assertEquals("EUR-PHP", currencyPair.toString());
     }
 
     @Test
@@ -50,8 +52,8 @@ public class CurrencyPairTest {
         Currency rightCurrency = currencyPair.getRight();
         assertNotNull(leftCurrency);
         assertNotNull(rightCurrency);
-        assertEquals(Currency.EUR, leftCurrency);
-        assertEquals(Currency.USD, rightCurrency);
+        Assert.assertEquals(Currency.EUR, leftCurrency);
+        Assert.assertEquals(Currency.USD, rightCurrency);
     }
 
     @Test
@@ -60,20 +62,33 @@ public class CurrencyPairTest {
         assertNotNull(pair1);
         assertTrue(pair1.isPresent());
 
+        assertEquals(CurrencyPair.Direction.INVERSED, pair1.get().getRelativeDirection(Currency.EUR, Currency.AUD).orElse(null));
+        assertEquals(CurrencyPair.Direction.NORMAL, pair1.get().getRelativeDirection(Currency.AUD, Currency.EUR).orElse(null));
+        assertNull(pair1.get().getRelativeDirection(Currency.USD, Currency.EUR).orElse(null));
+
         Optional<CurrencyPair> pair2 = CurrencyPair.Builder.create().currencies(Currency.AUD, Currency.EUR).build();
         assertNotNull(pair2);
         assertTrue(pair2.isPresent());
+
+        assertEquals(CurrencyPair.Direction.INVERSED, pair2.get().getRelativeDirection(Currency.EUR, Currency.AUD).orElse(null));
+        assertEquals(CurrencyPair.Direction.NORMAL, pair2.get().getRelativeDirection(Currency.AUD, Currency.EUR).orElse(null));
+        assertNull(pair2.get().getRelativeDirection(Currency.USD, Currency.EUR).orElse(null));
 
         Optional<CurrencyPair> pair3 = CurrencyPair.Builder.create().currencies(Currency.USD, Currency.EUR).build();
         assertNotNull(pair3);
         assertTrue(pair3.isPresent());
 
+        assertEquals(CurrencyPair.Direction.NORMAL, pair3.get().getRelativeDirection(Currency.EUR, Currency.USD).orElse(null));
+        assertEquals(CurrencyPair.Direction.INVERSED, pair3.get().getRelativeDirection(Currency.USD, Currency.EUR).orElse(null));
+        assertNull(pair3.get().getRelativeDirection(Currency.AUD, Currency.EUR).orElse(null));
+
+
         assertEquals(pair1, pair2);
-        assertEquals(pair1.get(), pair2.get());
-        assertEquals(pair1.get().hashCode(), pair2.get().hashCode());
+        Assert.assertEquals(pair1.get(), pair2.get());
+        Assert.assertEquals(pair1.get().hashCode(), pair2.get().hashCode());
 
         assertNotEquals(pair1, pair3);
-        assertNotEquals(pair1.get(), pair3.get());
-        assertNotEquals(pair1.get().hashCode(), pair3.get().hashCode());
+        Assert.assertNotEquals(pair1.get(), pair3.get());
+        Assert.assertNotEquals(pair1.get().hashCode(), pair3.get().hashCode());
     }
 }

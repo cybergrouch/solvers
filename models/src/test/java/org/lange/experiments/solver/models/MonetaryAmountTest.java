@@ -1,6 +1,8 @@
-package org.lange.experiments.solver.cocosolver.currencytransfer.models;
+package org.lange.experiments.solver.models;
 
+import org.junit.Assert;
 import org.junit.Test;
+import org.lange.experiments.solver.models.ModelBuilder;
 
 import java.util.Optional;
 
@@ -33,14 +35,14 @@ public class MonetaryAmountTest {
 
         MonetaryAmount monetaryAmount = monetaryAmountOptional.get();
         assertNotNull(monetaryAmount);
-        assertEquals(Currency.USD, monetaryAmount.getCurrency());
-        assertEquals((Long) 10000L, monetaryAmount.getAmount());
+        Assert.assertEquals(Currency.USD, monetaryAmount.getCurrency());
+        Assert.assertEquals((Long) 10000L, monetaryAmount.getAmount());
 
         monetaryAmount.setCurrency(Currency.AUD);
-        assertEquals(Currency.AUD, monetaryAmount.getCurrency());
+        Assert.assertEquals(Currency.AUD, monetaryAmount.getCurrency());
 
         monetaryAmount.setAmount(20000L);
-        assertEquals((Long) 20000L, monetaryAmount.getAmount());
+        Assert.assertEquals((Long) 20000L, monetaryAmount.getAmount());
     }
 
     @Test
@@ -63,7 +65,7 @@ public class MonetaryAmountTest {
 
         MonetaryAmount monetaryAmount = monetaryAmountOptional3.get();
         assertNotNull(monetaryAmount);
-        assertEquals(Currency.USD, monetaryAmount.getCurrency());
-        assertEquals((Long) 10000L, monetaryAmount.getAmount());
+        Assert.assertEquals(Currency.USD, monetaryAmount.getCurrency());
+        Assert.assertEquals((Long) 10000L, monetaryAmount.getAmount());
     }
 }

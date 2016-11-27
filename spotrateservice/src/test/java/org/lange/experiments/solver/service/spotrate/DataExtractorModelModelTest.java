@@ -1,13 +1,24 @@
 package org.lange.experiments.solver.service.spotrate;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.Test;
+import org.lange.experiments.solver.service.spotrate.model.yahoo.QuoteJsonModel;
+import org.lange.experiments.solver.service.spotrate.model.SpotRateQuote;
+import org.lange.experiments.solver.service.spotrate.utils.FileUtils;
+import org.lange.experiments.solver.service.spotrate.utils.JsonUtils;
+import org.lange.experiments.solver.service.spotrate.model.yahoo.TransformUtils;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.Reader;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static org.junit.Assert.*;
 
@@ -24,29 +35,40 @@ public class DataExtractorModelModelTest {
         assertNotNull(buildOptional);
         assertFalse(buildOptional.isPresent());
 
-        String userDirectory = System.getProperty("user.dir");
-        String resourcePath = String.format("%s/%s/%s", userDirectory, "src/test/resources/json", "yahoo_finance.json");
-        Reader in = new FileReader(resourcePath);
-        assertNotNull(in);
-
-        builder = builder.reader(in);
+        builder = Optional.of("test/resources/json/yahoo/yahoo_finance.json")
+                .map(FileUtils.readerFromResource.compose(FileUtils.resourceNameToPath))
+                .map(builder::reader).orElse(null);
         assertNotNull(builder);
         buildOptional = builder.build();
         assertNotNull(buildOptional);
-        assertTrue(buildOptional.isPresent());
-
-        DataExtractorModel dataExtractorModel = buildOptional.orElse(null);
-        assertNotNull(dataExtractorModel);
+        assertFalse(buildOptional.isPresent());
     }
 
     @Test
-    public void testExtractor() throws FileNotFoundException {
-        String userDirectory = System.getProperty("user.dir");
-        String resourcePath = String.format("%s/%s/%s", userDirectory, "src/test/resources/json", "yahoo_finance.json");
-        Reader in = new FileReader(resourcePath);
-        assertNotNull(in);
+    public void testExtractor() throws FileNotFoundException, InterruptedException, ExecutionException {
+        Function<Reader, List<QuoteJsonModel>> processor = reader ->
+                Optional.of(reader)
+                        .map(FileUtils.toString)
+                        .map(JSONObject::new)
+                        .map(object -> object.getJSONObject("list"))
+                        .map(object -> object.getJSONArray("resources"))
+                        .map(resources -> {
+                            List<QuoteJsonModel> objectList = new LinkedList<>();
+                            Function<String, QuoteJsonModel> castor = JsonUtils.getReaderForClass(QuoteJsonModel.class);
+                            for (int i = 0; i < resources.length(); ++i) {
+                                JSONObject fields = resources.getJSONObject(i).getJSONObject("resource").getJSONObject("fields");
+                                String jsonString = fields.toString();
+                                QuoteJsonModel model = castor.apply(jsonString);
+                                objectList.add(model);
+                            }
+                            return objectList;
+                        }).orElse(Collections.emptyList());
 
-        DataExtractorModel.Builder builder = DataExtractorModel.Builder.create(JSONObject.class).reader(in);
+        DataExtractorModel.Builder builder =
+                DataExtractorModel.Builder
+                        .create(List.class)
+                        .reader(FileUtils.readerFromResource.compose(FileUtils.resourceNameToPath).apply("test/resources/json/yahoo/yahoo_finance.json"))
+                        .processor(processor);
         assertNotNull(builder);
 
         Optional<DataExtractorModel> buildOptional = builder.build();
@@ -56,12 +78,20 @@ public class DataExtractorModelModelTest {
         DataExtractorModel dataExtractorModel = buildOptional.orElse(null);
         assertNotNull(dataExtractorModel);
 
-        Callable<JSONObject> extractor = dataExtractorModel.getExtractor(new JSONObject());
+        Callable<List<QuoteJsonModel>> extractor = dataExtractorModel.getExtractor(new JSONArray());
 
         ExecutorService executorService = Executors.newFixedThreadPool(1);
-        ExecutorCompletionService<JSONObject> completionService = new ExecutorCompletionService<JSONObject>(executorService);
-        Future<JSONObject> submit = completionService.submit(extractor);
+        ExecutorCompletionService<List<QuoteJsonModel>> completionService = new ExecutorCompletionService<>(executorService);
+        completionService.submit(extractor);
 
+        Future<List<QuoteJsonModel>> take = completionService.take();
+        assertNotNull(take);
+        assertTrue(take.isDone());
 
+        List<QuoteJsonModel> object = take.get();
+        assertNotNull(object);
+
+        List<SpotRateQuote> collect = object.stream().map(TransformUtils.toSpotRateQuote).filter(Optional::isPresent).map(Optional::get).collect(Collectors.toList());
+        assertNotNull(collect);
     }
 }

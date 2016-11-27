@@ -61,20 +61,22 @@ public class CurrencyPairRate {
             return new Builder();
         }
 
-        public Builder currencyPair(CurrencyPair currencyPair) {
-            Optional.ofNullable(currencyPair).ifPresent(object::setCurrencyPair);
-            return this;
-        }
-
         public Builder quotedRate(Currency fromCurrency, Currency toCurrency, BigDecimal conversionRate) {
-            Optional.ofNullable(conversionRate).map(rt -> Optional.ofNullable(fromCurrency).map(f -> Optional.ofNullable(toCurrency).map(t -> {
-                CurrencyPair currencyPair = CurrencyPair.create(fromCurrency, toCurrency);
+            Optional<CurrencyPair> currencyPair = Optional.ofNullable(conversionRate)
+                    .map(rt -> Optional.ofNullable(fromCurrency)
+                            .map(f -> Optional.ofNullable(toCurrency)
+                                    .map(t -> CurrencyPair.create(fromCurrency, toCurrency))
+                                    .orElse(null))
+                            .orElse(null));
+
+            currencyPair.ifPresent(object::setCurrencyPair);
+            currencyPair.map(pair -> {
                 InversibleRate inversibleRate = InversibleRate.Builder.create().rate(conversionRate).build().get();
-                if (CurrencyPair.Direction.NORMAL.equals(currencyPair.getRelativeDirection(fromCurrency, toCurrency))) {
+                if (CurrencyPair.Direction.NORMAL.equals(pair.getRelativeDirection(fromCurrency, toCurrency))) {
                     return inversibleRate;
                 }
                 return inversibleRate.getInversedRate();
-            }).orElse(null)).orElse(null)).ifPresent(object::setCurrencyPairRate);
+            }).ifPresent(object::setCurrencyPairRate);
             return this;
         }
     }

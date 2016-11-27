@@ -1,5 +1,6 @@
-package org.lange.experiments.solver.service.spotrate;
+package org.lange.experiments.solver.service.spotrate.model;
 
+import org.joda.time.DateTime;
 import org.junit.Test;
 import org.lange.experiments.solver.models.Currency;
 import org.lange.experiments.solver.models.CurrencyPair;
@@ -29,10 +30,12 @@ public class SpotRateQuoteTest {
     @Test
     public void testValidProperties() {
         BigDecimal rate = new BigDecimal(49.830002);
+        DateTime now = DateTime.now();
+        DateTime tomorrow = now.plusDays(1);
 
         SpotRateQuote.Builder builder = SpotRateQuote.Builder.create();
         assertNotNull(builder);
-        Optional<SpotRateQuote> buildOptional = builder.rate(Currency.USD, Currency.PHP, rate).build();
+        Optional<SpotRateQuote> buildOptional = builder.rate(Currency.USD, Currency.PHP, rate).validFrom(now).validUntil(tomorrow).build();
         assertNotNull(buildOptional);
         assertTrue(buildOptional.isPresent());
 
@@ -60,6 +63,21 @@ public class SpotRateQuoteTest {
         assertNotNull(builder);
         buildOptional = builder.build();
         assertNotNull(buildOptional);
+        assertFalse(buildOptional.isPresent());
+
+        DateTime now = DateTime.now();
+        DateTime tomorrow = now.plusDays(1);
+
+        builder = builder.validFrom(now);
+        assertNotNull(builder);
+        buildOptional = builder.build();
+        assertNotNull(buildOptional);
+        assertFalse(buildOptional.isPresent());
+
+        builder = builder.validUntil(tomorrow);
+        assertNotNull(builder);
+        buildOptional = builder.build();
+        assertNotNull(buildOptional);
         assertTrue(buildOptional.isPresent());
 
         SpotRateQuote spotRateQuote = buildOptional.orElse(null);
@@ -69,5 +87,11 @@ public class SpotRateQuoteTest {
 
         CurrencyPair currencyPair = CurrencyPair.create(Currency.USD, Currency.PHP);
         assertEquals(currencyPair, spotRateQuote.getCurrencyPair());
+
+        assertEquals(now, spotRateQuote.getValidFrom());
+        assertEquals(tomorrow, spotRateQuote.getValidUntil());
+
+        assertTrue(spotRateQuote.isValid(now.plusMinutes(20)));
+        assertFalse(spotRateQuote.isValid(now.plusDays(2)));
     }
 }

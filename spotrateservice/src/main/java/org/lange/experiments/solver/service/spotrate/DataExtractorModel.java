@@ -1,7 +1,9 @@
 package org.lange.experiments.solver.service.spotrate;
 
+import org.apache.commons.io.IOUtils;
 import org.lange.experiments.solver.models.ModelBuilder;
 
+import java.io.IOException;
 import java.io.Reader;
 import java.util.Optional;
 import java.util.concurrent.Callable;
@@ -15,6 +17,7 @@ import java.util.stream.Stream;
 public class DataExtractorModel<T> {
 
     private Supplier<Reader> dataReader;
+    private Function<Reader, T> processor;
 
     private DataExtractorModel(Class<T> clazz) {
         super();
@@ -32,10 +35,17 @@ public class DataExtractorModel<T> {
         return new Callable<T>() {
             @Override
             public T call() throws Exception {
-                return defaultValue;
-//                Optional.ofNullable(dataReader).map(Supplier::get);
+                return Optional.ofNullable(dataReader).map(Supplier::get).map(getProcessor()).orElse(defaultValue);
             }
         };
+    }
+
+    public Function<Reader, T> getProcessor() {
+        return processor;
+    }
+
+    public void setProcessor(Function<Reader, T> processor) {
+        this.processor = processor;
     }
 
     public static class Builder<T> implements ModelBuilder<DataExtractorModel> {
@@ -53,8 +63,13 @@ public class DataExtractorModel<T> {
             return this;
         }
 
+        public Builder processor(Function<Reader, T> processor) {
+            Optional.ofNullable(processor).ifPresent(object::setProcessor);
+            return this;
+        }
+
         public Stream<Function<DataExtractorModel, ?>> getFieldExtractors() {
-            return Stream.of(DataExtractorModel::getDataReader);
+            return Stream.of(DataExtractorModel::getDataReader, DataExtractorModel::getProcessor);
         }
 
         public DataExtractorModel getBaseObject() {

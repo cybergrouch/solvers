@@ -45,7 +45,7 @@ public class CurrencyPairRateTest {
         Currency toCurrency = Currency.PHP;
         BigDecimal conversionRate = new BigDecimal(49.820002);
 
-        CurrencyPairRate.Builder builder = CurrencyPairRate.Builder.create().currencyPair(CurrencyPair.create(fromCurrency, toCurrency)).quotedRate(fromCurrency, toCurrency, conversionRate);
+        CurrencyPairRate.Builder builder = CurrencyPairRate.Builder.create().quotedRate(fromCurrency, toCurrency, conversionRate);
         assertNotNull(builder);
 
         Optional<CurrencyPairRate> buildOptional = builder.build();
@@ -69,12 +69,6 @@ public class CurrencyPairRateTest {
         CurrencyPairRate.Builder builder = CurrencyPairRate.Builder.create();
         assertNotNull(builder);
         Optional<CurrencyPairRate> buildOptional = builder.build();
-        assertNotNull(buildOptional);
-        assertFalse(buildOptional.isPresent());
-
-        builder = builder.currencyPair(CurrencyPair.create(fromCurrency, toCurrency));
-        assertNotNull(builder);
-        buildOptional = builder.build();
         assertNotNull(buildOptional);
         assertFalse(buildOptional.isPresent());
 

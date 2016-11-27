@@ -54,7 +54,7 @@ public class CurrencyPair {
     }
 
     public Optional<CurrencyPairRate> createRate(Currency fromCurrency, Currency toCurrency, BigDecimal conversionRate) {
-        return CurrencyPairRate.Builder.create().currencyPair(this).quotedRate(fromCurrency, toCurrency, conversionRate).build();
+        return CurrencyPairRate.Builder.create().quotedRate(fromCurrency, toCurrency, conversionRate).build();
     }
 
     @Override

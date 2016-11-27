@@ -29,10 +29,10 @@ public final class FileUtils {
     };
 
     public static final Function<Reader, String> toString = reader -> Optional.ofNullable(reader).map(rd -> {
-            try {
-                return IOUtils.toString(reader);
-            } catch (IOException e) {
-                return null;
-            }
-        }).orElse("");
+        try {
+            return IOUtils.toString(reader);
+        } catch (IOException e) {
+            return null;
+        }
+    }).orElse("");
 }

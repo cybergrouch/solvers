@@ -1,4 +1,4 @@
-package org.lange.experiments.solver.service.spotrate.impl.model;
+package org.lange.experiments.solver.service.spotrate.model;
 
 import org.joda.time.DateTime;
 import org.lange.experiments.solver.models.Currency;
@@ -84,10 +84,10 @@ public class SpotRateQuote {
         public Builder rate(Currency fromCurrency, Currency toCurrency, BigDecimal rate) {
             Optional.ofNullable(rate)
                     .map(rt -> Optional.ofNullable(fromCurrency)
-                                    .map(f -> Optional.ofNullable(toCurrency)
-                                            .map(t -> CurrencyPairRate.Builder.create().quotedRate(fromCurrency, toCurrency, rate).build().orElse(null))
-                                            .orElse(null))
+                            .map(f -> Optional.ofNullable(toCurrency)
+                                    .map(t -> CurrencyPairRate.Builder.create().quotedRate(fromCurrency, toCurrency, rate).build().orElse(null))
                                     .orElse(null))
+                            .orElse(null))
                     .ifPresent(object::setCurrencyPairRate);
             return this;
         }

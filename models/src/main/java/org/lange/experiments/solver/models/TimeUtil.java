@@ -16,13 +16,13 @@ public class TimeUtil {
     public static final Function<Integer, Function<Integer, Function<Integer, Function<Integer, Function<Integer, DateTime>>>>>
             toUtcDateTime = (Integer year) -> (Integer month) -> (Integer date) -> (Integer hour) -> (Integer minute) ->
             Optional.of(new DateTime()
-                        .withYear(year)
-                        .withMonthOfYear(month)
-                        .withDayOfMonth(date)
-                        .withHourOfDay(hour)
-                        .withMinuteOfHour(minute)
-                        .withSecondOfMinute(0)
-                        .withMillisOfSecond(0))
+                    .withYear(year)
+                    .withMonthOfYear(month)
+                    .withDayOfMonth(date)
+                    .withHourOfDay(hour)
+                    .withMinuteOfHour(minute)
+                    .withSecondOfMinute(0)
+                    .withMillisOfSecond(0))
                     .map(adjustToUtc)
                     .orElse(null);
 }

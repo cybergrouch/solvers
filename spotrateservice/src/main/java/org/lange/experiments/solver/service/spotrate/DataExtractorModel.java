@@ -1,9 +1,7 @@
 package org.lange.experiments.solver.service.spotrate;
 
-import org.apache.commons.io.IOUtils;
 import org.lange.experiments.solver.models.ModelBuilder;
 
-import java.io.IOException;
 import java.io.Reader;
 import java.util.Optional;
 import java.util.concurrent.Callable;

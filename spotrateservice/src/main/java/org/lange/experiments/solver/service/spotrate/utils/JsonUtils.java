@@ -3,7 +3,6 @@ package org.lange.experiments.solver.service.spotrate.utils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
-import java.util.Optional;
 import java.util.function.Function;
 
 /**

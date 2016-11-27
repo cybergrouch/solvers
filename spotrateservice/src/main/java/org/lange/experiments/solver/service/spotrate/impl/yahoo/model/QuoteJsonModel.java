@@ -1,4 +1,4 @@
-package org.lange.experiments.solver.service.spotrate.impl.model.yahoo;
+package org.lange.experiments.solver.service.spotrate.impl.yahoo.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;

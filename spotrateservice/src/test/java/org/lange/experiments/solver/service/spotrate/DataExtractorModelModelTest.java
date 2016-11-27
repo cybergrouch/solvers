@@ -3,14 +3,13 @@ package org.lange.experiments.solver.service.spotrate;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.Test;
-import org.lange.experiments.solver.service.spotrate.model.yahoo.QuoteJsonModel;
+import org.lange.experiments.solver.service.spotrate.impl.yahoo.model.QuoteJsonModel;
+import org.lange.experiments.solver.service.spotrate.impl.yahoo.model.TransformUtils;
 import org.lange.experiments.solver.service.spotrate.model.SpotRateQuote;
 import org.lange.experiments.solver.service.spotrate.utils.FileUtils;
 import org.lange.experiments.solver.service.spotrate.utils.JsonUtils;
-import org.lange.experiments.solver.service.spotrate.model.yahoo.TransformUtils;
 
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.Reader;
 import java.util.Collections;
 import java.util.LinkedList;

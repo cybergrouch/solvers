@@ -2,6 +2,7 @@ group 'org.lange.experiments.solver'
 version '1.0-SNAPSHOT'
 
 apply plugin: 'java'
+apply plugin: 'jacoco'
 
 sourceCompatibility = 1.8
 
@@ -19,3 +20,5 @@ dependencies {
 //    compile group: 'com.google.guava', name: 'guava', version: '20.0'
     compile group: 'com.codepoetics', name: 'protonpack', version: '1.9'
 }
+
+test { finalizedBy jacocoTestReport }

@@ -2,6 +2,7 @@ group 'org.lange.experiments.solver'
 version '1.0-SNAPSHOT'
 
 apply plugin: 'java'
+apply plugin: 'jacoco'
 
 sourceCompatibility = 1.8
 
@@ -17,3 +18,5 @@ dependencies {
     compile group: 'org.choco-solver', name: 'choco-solver', version: '4.0.0'
     compile group: 'org.apache.commons', name: 'commons-csv', version: '1.4'
 }
+
+test { finalizedBy jacocoTestReport }
